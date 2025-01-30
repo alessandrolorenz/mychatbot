@@ -9,9 +9,7 @@ app.use(bodyParser.json());
 
 app.post("/chat", async (req, res) => {
     const chatHistory = req.body.history || [];
-
-
-    if (!userMessage || userMessage.trim() === "") {
+    if (chatHistory.length === 0) {
         return res.status(400).json({ error: "A mensagem não pode estar vazia." });
     }
 
