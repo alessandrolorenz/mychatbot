@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 const app = express();
-const allowedOrigins = ["https://mychatbot-frontend.vercel.app"];
+const allowedOrigins = ["https://mychatbot-frontend.vercel.app", "https://alessandrolorenz.vercel.app"];
 app.use(
     cors({
         origin: allowedOrigins,
