@@ -3,14 +3,13 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-const apiKey = process.env.OPENAI_API_KEY;
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
 app.post("/chat", async (req, res) => {
-    const userMessage = req.body.message;
+    const chatHistory = req.body.history || [];
+
 
     if (!userMessage || userMessage.trim() === "") {
         return res.status(400).json({ error: "A mensagem não pode estar vazia." });
@@ -25,7 +24,8 @@ app.post("/chat", async (req, res) => {
             },
             body: JSON.stringify({
                 model: "command",
-                message: userMessage
+                message: chatHistory[chatHistory.length - 1].message,
+                chat_history: chatHistory.slice(0, -1)
             })
         });
 
