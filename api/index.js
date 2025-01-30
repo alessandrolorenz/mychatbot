@@ -4,11 +4,14 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 const app = express();
-const corsOptions = {
-    origin: "https://mychatbot-frontend.vercel.app",
-    optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
+const allowedOrigins = ["https://mychatbot-frontend.vercel.app"];
+app.use(
+    cors({
+        origin: allowedOrigins,
+        methods: ["GET", "POST"],
+        allowedHeaders: ["Content-Type", "Authorization"]
+    })
+);
 app.use(bodyParser.json());
 
 app.post("/chat", async (req, res) => {
