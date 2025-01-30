@@ -51,6 +51,7 @@ app.post("/chat", async (req, res) => {
         res.json({ reply: botResponse.text });
 
     } catch (error) {
+        console.error("Erro ao chamar a API do chatbot:", error);
         res.status(500).json({ error: "Erro no servidor." });
     }
 });
