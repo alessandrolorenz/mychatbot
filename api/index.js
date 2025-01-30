@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 
 app.post("/chat", async (req, res) => {
     const chatHistory = req.body.history || [];
+    console.log("req.body");
     console.log(req.body);
     if (chatHistory.length === 0) {
         return res.status(400).json({ error: "A mensagem não pode estar vazia." });
@@ -37,7 +38,8 @@ app.post("/chat", async (req, res) => {
                 model: "command",
                 message: chatHistory[chatHistory.length - 1].message,
                 chat_history: chatHistory.slice(0, -1)
-            })
+            }),
+            timeout: 10000
         });
 
         const botResponse = await response.json();
