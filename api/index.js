@@ -39,7 +39,7 @@ app.post("/chat", async (req, res) => {
                 message: chatHistory[chatHistory.length - 1].message,
                 chat_history: chatHistory.slice(0, -1)
             }),
-            timeout: 10000
+            timeout: 30000
         });
 
         const botResponse = await response.json();
