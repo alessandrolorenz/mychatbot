@@ -16,17 +16,11 @@ app.use(bodyParser.json());
 
 app.post("/chat", async (req, res) => {
     const chatHistory = req.body.history || [];
-    console.log("req.body");
-    console.log(req.body);
     if (chatHistory.length === 0) {
         return res.status(400).json({ error: "A mensagem não pode estar vazia." });
     }
 
     try {
-        console.log("chatHistory[chatHistory.length - 1].message");
-        console.log(chatHistory[chatHistory.length - 1].message);
-        console.log("chatHistory.slice(0, -1)");
-        console.log(chatHistory.slice(0, -1));
 
         const response = await fetch("https://api.cohere.ai/v1/chat", {
             method: "POST",
