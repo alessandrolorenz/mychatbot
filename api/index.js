@@ -42,6 +42,6 @@ app.post("/chat", async (req, res) => {
     }
 });
 
-app.listen(3000, () => console.log("Chatbot rodando na porta 3000"));
+// app.listen(3000, () => console.log("Chatbot rodando na porta 3000"));
 
 module.exports = app;
