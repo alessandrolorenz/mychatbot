@@ -21,6 +21,9 @@ app.post("/chat", async (req, res) => {
         const url = req.body.url || "";
         const file_id = req.body.file_id || "";
         const node_id = req.body.node_id || "";
+        console.log("Chat History:", chatHistory);
+        console.log("URL:", url);
+        console.log("File ID:", file_id);
         const response = await fetch(`https://api.figma.com/v1/files/${file_id}?ids=${node_id}`, {
             method: "GET",
             headers: {
