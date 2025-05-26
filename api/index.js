@@ -15,7 +15,7 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.post("/chat", async (req, res) => {
+app.post("/styles", async (req, res) => {
        try {
         const chatHistory = req.body.history || [];
         const url = req.body.url || "";
@@ -42,6 +42,31 @@ app.post("/chat", async (req, res) => {
         }
 
         res.json({ reply: botResponse });
+
+    } catch (error) {
+        console.error("Erro ao chamar a API do chatbot:", error);
+        res.status(500).json({ error: "Erro no servidor." });
+    }
+});
+
+app.post("/apiflash-prints", async (req, res) => {
+       try {
+        const url = req.body.url || "";
+        console.log("URL:", url);
+        const response = await fetch(`https://api.apiflash.com/v1/urltoimage?access_key=${process.env.APIFLASH_KEY}&url=${url}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            timeout: 30000
+        });
+        console.log("Response from APIFLASH API:", response.status, response);
+        const botResponse = await response.json();
+        const base64Image = botResponse.base64;
+        if (!base64Image) {
+            return res.status(500).json({ error: "Erro ao obter resposta do APIFLASH." });
+        }
+
 
     } catch (error) {
         console.error("Erro ao chamar a API do chatbot:", error);
