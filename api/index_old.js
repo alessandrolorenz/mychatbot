@@ -9,36 +9,40 @@ app.use(
     cors({
         origin: allowedOrigins,
         methods: ["GET", "POST"],
-        allowedHeaders: ["Content-Type", "Authorization", "X-Figma-Token"]
+        allowedHeaders: ["Content-Type", "Authorization"]
     })
 );
-
 app.use(bodyParser.json());
 
-app.get("/chat", async (req, res) => {
-       try {
-        const chatHistory = req.body.history || [];
-        const url = req.body.url || "";
-        const file_id = req.body.file_id || "";
-        const node_id = req.body.node_id || "";
-        const response = await fetch(`https://api.figma.com/v1/files/${file_id}?ids=${node_id}`, {
-            method: "GET",
+app.post("/chat", async (req, res) => {
+    const chatHistory = req.body.history || [];
+    if (chatHistory.length === 0) {
+        return res.status(400).json({ error: "A mensagem não pode estar vazia." });
+    }
+
+    try {
+
+        const response = await fetch("https://api.cohere.ai/v1/chat", {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Figma-Token": `${process.env.X_FIGMA_TOKEN}`
+                "Authorization": `Bearer ${process.env.COHERE_API_KEY}`
             },
-
+            body: JSON.stringify({
+                model: "command",
+                message: chatHistory[chatHistory.length - 1].message,
+                chat_history: chatHistory.slice(0, -1)
+            }),
             timeout: 30000
         });
 
-        console.log("Response from Figma API:", chatHistory);
         const botResponse = await response.json();
         
-        if (!botResponse) {
+        if (!botResponse || !botResponse.text) {
             return res.status(500).json({ error: "Erro ao obter resposta do chatbot." });
         }
 
-        res.json({ reply: botResponse });
+        res.json({ reply: botResponse.text });
 
     } catch (error) {
         console.error("Erro ao chamar a API do chatbot:", error);
