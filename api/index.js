@@ -34,7 +34,7 @@ app.post("/chat", async (req, res) => {
             timeout: 30000
         });
 
-        console.log("Response from Figma API:", chatHistory);
+        console.log("Response from Figma API:", response.status, response);
         const botResponse = await response.json();
         
         if (!botResponse) {
