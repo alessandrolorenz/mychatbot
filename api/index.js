@@ -21,9 +21,6 @@ app.post("/styles", async (req, res) => {
         const url = req.body.url || "";
         const file_id = req.body.file_id || "";
         const node_id = req.body.node_id || "";
-        console.log("Chat History:", chatHistory);
-        console.log("URL:", url);
-        console.log("File ID:", file_id);
         const response = await fetch(`https://api.figma.com/v1/files/${file_id}?ids=${node_id}`, {
             method: "GET",
             headers: {
@@ -51,7 +48,7 @@ app.post("/styles", async (req, res) => {
 
 app.post("/apiflash-prints", async (req, res) => {
        try {
-        const url = req.body.url || "";
+        const url = req.body.url || "empty";
         console.log("URL:", url);
         const response = await fetch(`https://api.apiflash.com/v1/urltoimage?access_key=${process.env.APIFLASH_KEY}&url=${url}`, {
             method: "GET",
@@ -61,12 +58,12 @@ app.post("/apiflash-prints", async (req, res) => {
             timeout: 30000
         });
         console.log("Response from APIFLASH API:", response.status, response);
-        const botResponse = await response.json();
-        const base64Image = botResponse.base64;
+        const buffer = await response.arrayBuffer();
+        const base64Image = Buffer.from(buffer).toString("base64");
         if (!base64Image) {
             return res.status(500).json({ error: "Erro ao obter resposta do APIFLASH." });
         }
-
+        res.json({ base64: base64Image });
 
     } catch (error) {
         console.error("Erro ao chamar a API do chatbot:", error);
