@@ -15,7 +15,7 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.get("/chat", async (req, res) => {
+app.post("/chat", async (req, res) => {
        try {
         const chatHistory = req.body.history || [];
         const url = req.body.url || "";
