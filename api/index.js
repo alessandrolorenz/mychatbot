@@ -57,6 +57,7 @@ app.post("/apiflash-prints", async (req, res) => {
             },
             timeout: 30000
         });
+        res.setHeader("Content-Type", response.headers.get("content-type") || "image/jpeg");
         console.log("Response from APIFLASH API:", response.status, response);
         const buffer = await response.arrayBuffer();
         const base64Image = Buffer.from(buffer).toString("base64");
